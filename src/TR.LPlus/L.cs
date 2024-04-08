@@ -17,9 +17,7 @@ public sealed class L
     {
         if (l._dateTimeComponent is not null) return l._dateTimeComponent.Value.ToString(text);
         
-        var languageCode = TR.Options.DetermineLanguageCodeDelegate();
-        var key = TR.Options.BuildTranslationKeyDelegate(languageCode, text);
-        var translation = TR.Options.TryGetTranslationDelegate(key);
+        var translation = GetTranslation(text, out var key);
         if (translation is not null) return translation;
         
         TR.Options.MissingTranslationKeyOutputDelegate(key);
@@ -30,5 +28,20 @@ public sealed class L
     public static L operator +(L _, DateTime dateTime)
     {
         return new L(dateTime);
+    }
+    
+    public static bool operator &(L l, string text)
+    {
+        var translation = GetTranslation(text, out _);
+        return translation is not null;
+    }
+
+    // ReSharper disable once InconsistentNaming
+    private static string? GetTranslation(string text, out string key)
+    {
+        var languageCode = TR.Options.DetermineLanguageCodeDelegate();
+        key = TR.Options.BuildTranslationKeyDelegate(languageCode, text);
+        var translation = TR.Options.TryGetTranslationDelegate(key);
+        return translation;
     }
 }
