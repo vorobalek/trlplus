@@ -6,7 +6,8 @@
         <Nullable>enable</Nullable>
         <RootNamespace>LPlus</RootNamespace>
         <PackageId>TR.LPlus</PackageId>
-        <Version>0.0.1</Version>
+        <Version Condition="'$(VersionSuffix)' != ''">0.0.2-$(VersionSuffix)</Version>
+        <Version Condition="'$(VersionSuffix)' == ''">0.0.2</Version>
         <Product>L+</Product>
         <Authors>Alexey Vorobev</Authors>
         <PackageProjectUrl>https://github.com/vorobalek/trlplus</PackageProjectUrl>
