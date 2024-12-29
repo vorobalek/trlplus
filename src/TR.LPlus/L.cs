@@ -3,6 +3,7 @@ namespace LPlus;
 public sealed class L
 {
     private readonly DateTime? _dateTimeComponent;
+    private readonly DateTimeOffset? _dateTimeOffsetComponent;
 
     public L()
     {
@@ -13,9 +14,15 @@ public sealed class L
         _dateTimeComponent = dateTimeComponent;
     }
     
+    private L(DateTimeOffset dateTimeOffsetComponent)
+    {
+        _dateTimeOffsetComponent = dateTimeOffsetComponent;
+    }
+    
     public static string operator +(L l, string text)
     {
         if (l._dateTimeComponent is not null) return l._dateTimeComponent.Value.ToString(text);
+        if (l._dateTimeOffsetComponent is not null) return l._dateTimeOffsetComponent.Value.ToString(text);
         
         var translation = GetTranslation(text, out var key);
         if (translation is not null) return translation;
@@ -28,6 +35,11 @@ public sealed class L
     public static L operator +(L _, DateTime dateTime)
     {
         return new L(dateTime);
+    }
+    
+    public static L operator +(L _, DateTimeOffset dateTimeOffset)
+    {
+        return new L(dateTimeOffset);
     }
     
     public static bool operator &(L l, string text)
